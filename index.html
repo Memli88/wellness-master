@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>سلامت و تغذیه</title>
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="کتابچه سلامت">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+/* ══════════ iOS RESET & VARS ══════════ */
+:root {
+  --bg: #000000;
+  --card-bg: #1c1c1e;
+  --card-bg-hover: #2c2c2e;
+  --text: #ffffff;
+  --muted: #ebebf599;
+  --border: #38383a;
+  --blue: #0a84ff;
+  --green: #32d74b;
+  --orange: #ff9f0a;
+  --purple: #bf5af2;
+  --gold: #ffd60a;
+  --safe-top: env(safe-area-inset-top, 47px); /* iPhone 15 Pro Dynamic Island safe area */
+  --safe-bottom: env(safe-area-inset-bottom, 34px);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; background: var(--bg); }
+body { 
+  background: var(--bg); color: var(--text); font-family: -apple-system, 'Vazirmatn', sans-serif;
+  padding-top: calc(var(--safe-top) + 60px); padding-bottom: calc(var(--safe-bottom) + 20px);
+}
+
+/* ══════════ iOS SEARCH BAR ══════════ */
+.ios-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+  padding: calc(var(--safe-top) + 10px) 16px 10px;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 0.5px solid rgba(255,255,255,0.15);
+}
+.search-wrap { position: relative; width: 100%; }
+.search-input {
+  width: 100%; background: #7676803d; border-radius: 10px;
+  padding: 8px 36px 8px 12px; font-family: inherit; font-size: 17px;
+  color: var(--text); border: none; outline: none; direction: rtl;
+}
+.search-input::placeholder { color: #ebebf54d; }
+.search-icon { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #ebebf54d; font-size: 16px; pointer-events: none;}
+.search-clear { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: #76768080; border-radius: 50%; width: 18px; height: 18px; border: none; color: var(--bg); font-size: 10px; cursor: pointer; display: none; align-items: center; justify-content: center;}
+
+/* Search Results Dropdown */
+.search-results {
+  position: absolute; top: calc(100% + 10px); right: 0; left: 0;
+  background: rgba(28, 28, 30, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-radius: 14px; max-height: 60vh; overflow-y: auto; z-index: 1000; display: none;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5); border: 0.5px solid rgba(255,255,255,0.1);
+}
+.sr-item { padding: 12px 16px; border-bottom: 0.5px solid rgba(255,255,255,0.1); cursor: pointer; }
+.sr-item:last-child { border-bottom: none; }
+.sr-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.sr-excerpt { font-size: 13px; color: var(--muted); line-height: 1.4; }
+mark { background: rgba(50, 215, 75, 0.3); color: var(--green); border-radius: 3px; padding: 0 2px; }
+
+/* ══════════ CONTENT & CARDS (iOS Style) ══════════ */
+.content-wrap { padding: 0 16px; max-width: 600px; margin: 0 auto; }
+.section-title { font-size: 22px; font-weight: 700; margin: 32px 0 16px; color: var(--text); padding-right: 8px;}
+
+.ios-card {
+  background: var(--card-bg); border-radius: 18px; padding: 16px;
+  margin-bottom: 16px; position: relative; overflow: hidden;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.ios-card:active { transform: scale(0.98); background: var(--card-bg-hover); }
+
+.card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.card-icon { font-size: 24px; background: rgba(255,255,255,0.05); width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 12px; }
+.card-title { font-size: 16px; font-weight: 600; }
+.card-subtitle { font-size: 13px; color: var(--muted); margin-top: 2px;}
+
+/* Custom highlights */
+.highlight-ring { animation: flash-card 1.5s ease-out forwards; }
+@keyframes flash-card {
+  0% { box-shadow: 0 0 0 4px var(--green); background: rgba(50, 215, 75, 0.1); }
+  100% { box-shadow: 0 0 0 0px transparent; background: var(--card-bg); }
+}
+
+/* Lists and Tables */
+.recipe-box { background: rgba(0,0,0,0.3); border-radius: 12px; padding: 12px; margin-top: 12px; font-size: 14px; line-height: 1.6;}
+.recipe-box ul { list-style: none; margin-right: 8px;}
+.recipe-box li::before { content: '•'; color: var(--blue); position: absolute; right: 28px; font-weight: bold;}
+.recipe-box li { position: relative; padding-right: 14px; margin-bottom: 6px; color: var(--muted); }
+.recipe-box strong { color: var(--text); }
+
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.tag { font-size: 11px; padding: 4px 10px; border-radius: 12px; font-weight: 500; background: rgba(255,255,255,0.1); color: var(--text); }
+.tag.gold { color: var(--gold); background: rgba(255, 214, 10, 0.15); }
+.tag.green { color: var(--green); background: rgba(50, 215, 75, 0.15); }
+
+/* Table styling for iOS */
+.ios-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 12px; }
+.ios-table th { color: var(--muted); font-weight: 500; padding: 8px 4px; text-align: right; border-bottom: 0.5px solid var(--border); }
+.ios-table td { padding: 10px 4px; border-bottom: 0.5px solid rgba(255,255,255,0.05); }
+.ios-table tr:last-child td { border-bottom: none; }
+.good { color: var(--green); font-weight: 600; }
+.bad { color: #ff453a; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<nav class="ios-header">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" type="text" placeholder="جستجو (مثلاً: گرده گل، زنجبیل)...">
+    <button class="search-clear" id="clearBtn">✕</button>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</nav>
+
+<div class="content-wrap">
+
+  <h2 class="section-title">شروع روز و الکترولیت</h2>
+  
+  <div class="ios-card search-target">
+    <div class="card-header"><div class="card-icon">🍋</div><div><div class="card-title">لیمو ترش + روغن زیتون</div><div class="card-subtitle">سم‌زدایی کبد ناشتا</div></div></div>
+    <div class="recipe-box">
+      <ul>
+        <li><strong>آب ولرم:</strong> یک لیوان (زیر ۴۰ درجه)</li>
+        <li><strong>لیمو ترش تازه:</strong> نصف تا یک عدد</li>
+        <li><strong>روغن زیتون بکر:</strong> یک قاشق چایخوری</li>
+      </ul>
+      <p style="margin-top: 8px; font-size: 12px;">۳۰ دقیقه قبل از صبحانه میل شود. حتماً پس از آن دهان را با آب بشویید.</p>
+    </div>
+    <div class="tags"><span class="tag gold">قلیایی قوی پس از هضم</span></div>
+  </div>
+
+  <h2 class="section-title">سوپرفودها و تغذیه سلولی</h2>
+  
+  <div class="ios-card search-target">
+    <div class="card-header"><div class="card-icon">🌸</div><div><div class="card-title">گرده گل (Bee Pollen)</div><div class="card-subtitle">مولتی‌ویتامین و آنزیم زنده طبیعت</div></div></div>
+    <div class="recipe-box">
+      <p><strong>خواص اصلی:</strong> دارای بیش از ۵۰۰۰ آنزیم فعال، ۲۲ اسید آمینه کامل (پروتئین بسیار بالا)، و سرشار از ویتامین‌های گروه B. یک قلیایی‌کننده عالی (pH: +۲ تا +۳).</p>
+      <ul style="margin-top: 12px;">
+        <li><strong>نحوه مصرف:</strong> بهترین روش ترکیب آن به عنوان <strong>آخرین ماده</strong> در الکترولیت صبحگاهی است.</li>
+        <li><strong>حساسیت به دما:</strong> هرگز در مایعات بالای ۴۰ درجه سانتی‌گراد نریزید، زیرا تمام آنزیم‌های زنده آن از بین می‌روند.</li>
+        <li><strong>دوز مصرف:</strong> اگر تا به حال مصرف نکرده‌اید، با یک چهارم قاشق چای‌خوری شروع کنید تا از عدم حساسیت به فرآورده‌های زنبور مطمئن شوید. سپس می‌توانید به نصف تا یک قاشق چای‌خوری در روز برسانید.</li>
+      </ul>
+    </div>
+    <div class="tags">
+      <span class="tag gold">الکترولیت سلولی</span>
+      <span class="tag green">بمب انرژی</span>
+      <span class="tag">محافظت از اینترستیشیوم</span>
+    </div>
+  </div>
+
+  <div class="ios-card search-target">
+    <div class="card-header"><div class="card-icon">🍯</div><div><div class="card-title">عسل طبیعی خام (Raw Honey)</div><div class="card-subtitle">بدون حرارت دیدن</div></div></div>
+    <div class="recipe-box">
+      <p>عسل خام و حرارت ندیده حاوی پروبیوتیک‌ها و آنزیم‌های گوارشی است.</p>
+      <ul>
+        <li><strong>ترکیب طلایی:</strong> عسل + آب ولرم + لیمو.</li>
+        <li><strong>نکته مهم:</strong> ریختن عسل در چای داغ یا آب جوش، آن را به یک قند ساده و بدون خاصیت دارویی تبدیل می‌کند.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2 class="section-title">داروخانه ادویه‌ها</h2>
+
+  <div class="ios-card search-target">
+    <div class="card-header"><div class="card-icon">🟡</div><div><div class="card-title">زردچوبه و فلفل سیاه</div><div class="card-subtitle">قوی‌ترین ضد التهاب</div></div></div>
+    <div class="recipe-box">
+      <p><strong>کورکومین</strong> موجود در زردچوبه یک ضد التهاب بسیار قوی است.</p>
+      <ul>
+        <li>حتماً همراه با <strong>فلفل سیاه</strong> مصرف شود (پیپرین موجود در فلفل سیاه جذب کورکومین را ۲۰۰۰٪ افزایش می‌دهد).</li>
+        <li>چون کورکومین محلول در چربی است، پخت آن در روغن زیتون یا ترکیب با غذای چرب جذب آن را کامل می‌کند.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ios-card search-target">
+    <div class="card-header"><div class="card-icon">🌱</div><div><div class="card-title">زنجبیل تازه</div><div class="card-subtitle">هضم‌کننده و قلیایی‌ساز (+۳ تا +۴)</div></div></div>
+    <div class="recipe-box">
+      <p>جینجرول موجود در آن به شدت تولید آنزیم‌های گوارشی را تحریک می‌کند.</p>
+      <ul>
+        <li>بهترین دمنوش بعد از وعده سنگین غذایی.</li>
+        <li>در الکترولیت صبحگاهی برای افزایش سوخت و ساز عالی است.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2 class="section-title">میوه‌ها و زمان مصرف</h2>
+  
+  <div class="ios-card search-target">
+    <div class="card-header"><div class="card-icon">⏰</div><div><div class="card-title">قانون طلایی مصرف میوه</div><div class="card-subtitle">میوه را تنها بخور، یا اصلاً نخور</div></div></div>
+    <div class="recipe-box">
+      <p>هضم میوه در معده خالی حدود ۳۰ تا ۴۰ دقیقه طول می‌کشد. مصرف آن بلافاصله بعد از غذاهای سنگین (گوشتی/برنجی) باعث تخمیر قند میوه، ایجاد گاز و نفخ می‌شود.</p>
+      <table class="ios-table">
+        <tr><th>زمان</th><th>وضعیت</th></tr>
+        <tr><td>صبح ناشتا</td><td><span class="good">عالی (مثل سیب، کیوی)</span></td></tr>
+        <tr><td>قبل از غذا (۳۰ دقیقه)</td><td><span class="good">خوب (آماده‌سازی آنزیمی)</span></td></tr>
+        <tr><td>بلافاصله بعد غذا</td><td><span class="bad">ممنوع (تخمیر در معده)</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  </div>
+
+<script>
+// ══════════ SEARCH ENGINE ══════════
+const searchIndex = [];
+document.querySelectorAll('.search-target').forEach((card, i) => {
+  card.setAttribute('id', 'card-' + i);
+  searchIndex.push({
+    el: card,
+    text: card.innerText.toLowerCase(),
+    id: 'card-' + i,
+    title: card.querySelector('.card-title')?.innerText || ''
+  });
+});
+
+const input = document.querySelector('.search-input');
+const results = document.getElementById('searchResults');
+const clearBtn = document.getElementById('clearBtn');
+
+function doSearch(q) {
+  q = q.trim().toLowerCase();
+  if(q.length < 2) {
+    results.style.display = 'none';
+    clearBtn.style.display = 'none';
+    return;
+  }
+  clearBtn.style.display = 'flex';
+  
+  const hits = searchIndex.filter(item => item.text.includes(q)).slice(0, 8);
+  
+  if(hits.length === 0) {
+    results.innerHTML = '<div class="sr-item"><div class="sr-excerpt" style="text-align:center">نتیجه‌ای پیدا نشد</div></div>';
+  } else {
+    results.innerHTML = hits.map(h => `
+      <div class="sr-item" onclick="scrollToCard('${h.id}')">
+        <div class="sr-title">${h.title}</div>
+      </div>
+    `).join('');
+  }
+  results.style.display = 'block';
+}
+
+function scrollToCard(id) {
+  results.style.display = 'none';
+  input.value = '';
+  clearBtn.style.display = 'none';
+  input.blur();
+
+  const el = document.getElementById(id);
+  if(el) {
+    const y = el.getBoundingClientRect().top + window.scrollY - 120; // 120px offset for fixed header
+    window.scrollTo({top: y, behavior: 'smooth'});
+    
+    el.classList.remove('highlight-ring');
+    void el.offsetWidth; // trigger reflow
+    el.classList.add('highlight-ring');
+  }
+}
+
+input.addEventListener('input', e => doSearch(e.target.value));
+clearBtn.addEventListener('click', () => { input.value = ''; doSearch(''); input.focus(); });
+document.addEventListener('click', e => { if(!e.target.closest('.search-wrap')) results.style.display = 'none'; });
+
+// ══════════ PWA REGISTRATION ══════════
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('Service Worker Registered'))
+      .catch(err => console.log('SW Registration Failed', err));
+  });
+}
+</script>
+
+</body>
+</html>
